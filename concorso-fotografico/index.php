@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+$_SESSION['verified'] = false;
+
 require_once "Auth.php";
 require_once "Util.php";
 require_once "Member.php";
@@ -22,13 +24,20 @@ if ($isLoggedIn) {
         $ver = $user[0]["member_verified"];
 
         if($ver == 1) {
+            $_SESSION['verified'] = true;
+            $_SESSION['mail'] = $_POST['member_email'];
+
             $util->redirect("dashboard.php");
         }else
             $util->redirect("verifica.php");
     }
-    else
+    else{
+        $_SESSION['verified'] = true;
         $util->redirect("dashboard.php");
+
+    }
 }
+
 
 if (!empty($_POST["login"])) {
     $isAuthenticated = false;
@@ -40,6 +49,7 @@ if (!empty($_POST["login"])) {
         $message = "Invalid Login";
     } else if (password_verify($password, $user[0]["member_password"])) {
         $isAuthenticated = true;
+
     }
   
     if ($isAuthenticated) {
@@ -72,9 +82,13 @@ if (!empty($_POST["login"])) {
         }
         $ver = $user[0]['member_verified'];
         if($ver == 1) {
+            $_SESSION['verified'] = true;
+            $_SESSION['mail'] = $_POST['member_email'];
             $util->redirect("dashboard.php");
+
             }
         else {
+            $_SESSION['mail'] = $_POST['member_email'];
             $util->redirect("verifica.php");
         }
     } else {

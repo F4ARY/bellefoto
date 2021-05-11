@@ -1,75 +1,53 @@
---
--- Database: `db_auth`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `members`
---
-
 CREATE TABLE `members` (
-  `member_id` int(8) NOT NULL,
-  `member_surname` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `member_name` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `member_id` int(8) PRIMARY KEY AUTO_INCREMENT,
+  `member_surname` varchar(255) NOT NULL,
+  `member_name` varchar(255) NOT NULL,
   `member_password` varchar(64) NOT NULL,
-  `member_email` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `member_token` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `member_profile_picture` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `member_verified` BOOLEAN NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `members`
---
-
-INSERT INTO `members` (`member_id`, `member_name`, `member_password`, `member_email`, `member_token`) VALUES
-(1, 'admin', '$2a$10$0FHEQ5/cplO3eEKillHvh.y009Wsf4WCKvQHsZntLamTUToIBe.fG', 'user@gmail.com', SUBSTRING(MD5(RAND()) FROM 1 FOR 16));
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_token_auth`
---
+  `member_email` varchar(255) NOT NULL,
+  `member_token` varchar(255) NOT NULL,
+  `member_profile_picture` varchar(255) NOT NULL,
+  `member_verified` boolean NOT NULL
+);
 
 CREATE TABLE `tbl_token_auth` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
   `selector_hash` varchar(255) NOT NULL,
   `is_expired` int(11) NOT NULL DEFAULT '0',
   `expiry_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+);
 
---
--- Indexes for dumped tables
---
+CREATE TABLE `photo` (
+  `photo_id` int PRIMARY KEY AUTO_INCREMENT,
+  `file_name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `height` int(8),
+  `width` int(8),
+  `occupazione` varchar(255),
+  `lat` float,
+  `lng` float,
+  `data_scatto` datetime,
+  `1_stella` int NOT NULL,
+  `2_stelle` int NOT NULL,
+  `3_stelle` int NOT NULL,
+  `4_stelle` int NOT NULL,
+  `5_stelle` int NOT NULL,
+  `segnalazione` boolean NOT NULL,
+  `member_id` int NOT NULL
+);
 
---
--- Indexes for table `members`
---
-ALTER TABLE `members`
-  ADD PRIMARY KEY (`member_id`);
+CREATE TABLE `comment` (
+  `comment_id` int PRIMARY KEY AUTO_INCREMENT,
+  `comment` varchar(255) NOT NULL,
+  `member_id` int NOT NULL,
+  `photo_id` int NOT NULL
+);
 
---
--- Indexes for table `tbl_token_auth`
---
-ALTER TABLE `tbl_token_auth`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `photo` ADD FOREIGN KEY (`member_id`) REFERENCES `members` (`member_id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
+ALTER TABLE `comment` ADD FOREIGN KEY (`member_id`) REFERENCES `members` (`member_id`) ON DELETE CASCADE;
 
---
--- AUTO_INCREMENT for table `members`
---
-ALTER TABLE `members`
-  MODIFY `member_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `comment` ADD FOREIGN KEY (`photo_id`) REFERENCES `photo` (`photo_id`) ON DELETE CASCADE;
 
---
--- AUTO_INCREMENT for table `tbl_token_auth`
---
-ALTER TABLE `tbl_token_auth`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-COMMIT;
+ALTER TABLE `photo` ADD COLUMN media FLOAT AS ((1 * `1_stella` + 2 * `2_stelle` + 3 * `3_stelle` + 4 * `4_stelle` + 5 * `5_stelle`) / (`1_stella` + `2_stelle` + `3_stelle` + `4_stelle` + `5_stelle`));

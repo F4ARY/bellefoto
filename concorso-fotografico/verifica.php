@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once "Member.php";
 require_once "Util.php";
@@ -9,8 +10,12 @@ if(isset($_POST['member_email']) && isset($_POST['member_token']))
     $util = new Util();
     $token = $_POST['member_token'];
     $email = $_POST['member_email'];
-    if($member->verify($email, $token))
+    if($member->verify($email, $token)){
+        $_SESSION['verified'] = true;
         $util->redirect("dashboard.php");
+
+
+    }
     else {
 
         $message = "Errore: email o token non validi";
@@ -20,8 +25,6 @@ if(isset($_POST['member_email']) && isset($_POST['member_token']))
     }
 
 }
-
-
 
 
 ?>

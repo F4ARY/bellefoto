@@ -97,16 +97,44 @@ class Member
         return $memberRecord;
     }
 
-    public function getVerified($name)
+    public function getId($email)
     {
-        $query = 'SELECT member_verified FROM members where member_name = ?';
+        $query = 'SELECT member_id FROM members where member_email = ?';
         $paramType = 's';
         $paramValue = array(
-            $name
+            $email
         );
-        $ver = $this->ds->select($query, $paramType, $paramValue);
-        return $ver;
+        $memberRecord = $this->ds->select($query, $paramType, $paramValue);
+        return $memberRecord[0]['member_id'];
+
     }
+
+    public function getEmailByID($id)
+    {
+        $query = 'SELECT member_email FROM members where member_id = ?';
+        $paramType = 's';
+        $paramValue = array(
+            $id
+        );
+        $memberRecord = $this->ds->select($query, $paramType, $paramValue);
+        return $memberRecord[0]['member_email'];
+    }
+
+    public function getFoto($email)
+    {
+        $id = $this->getId($email);
+        $query = 'SELECT * FROM photo where member_id = ?';
+        $paramType = 'i';
+        $paramValue = array(
+            $id
+        );
+        $memberRecord = $this->ds->select($query, $paramType, $paramValue);
+        return $memberRecord;
+
+    }
+
+
+
 
     public function verify($email, $token)
     {
@@ -128,6 +156,99 @@ class Member
         return false;
 
     }
+
+    public function caricaImmagine($email, $img, $desc)
+    {
+        $response = null;
+        $id = $this->getId($email);
+
+        if (!empty($img["name"])) {
+            $target = "imgs/".$img["name"];
+            move_uploaded_file($img["tmp_name"], $target);
+        }
+
+        $query = 'INSERT INTO photo (description, member_id, file_name) VALUES (?, ?, ?)';
+        $paramType = 'sis';
+        $paramValue = array(
+            $desc,
+            $id,
+            $img["name"]
+        );
+        $memberId = $this->ds->insert($query, $paramType, $paramValue);
+        if(!empty($memberId)) {
+            $response = array(
+                "status" => "success",
+                "message" => "Immagine caricata!",
+
+            );
+        }
+
+        return $response;
+
+    }
+
+    public function cancellaImmagine($checkbox)
+    {
+        $response = null;
+
+        foreach ($checkbox as $id)
+        {
+            $query = 'SELECT file_name FROM photo where photo_id = ?';
+            $paramType = 'i';
+            $paramValue = array(
+                $id
+            );
+            $ver = $this->ds->select($query, $paramType, $paramValue);
+            unlink("imgs/".$ver[0]['file_name']);
+
+            $query = 'DELETE FROM photo WHERE photo_id = ?';
+            $paramType = 'i';
+            $paramValue = array(
+                $id
+            );
+            $memberId = $this->ds->update($query, $paramType, $paramValue);
+        }
+
+        $response = array(
+            "status" => "success",
+            "message" => "Immagine cancellata!",
+        );
+
+        return $response;
+    }
+
+    public function editImmagine($checkbox, $desc)
+    {
+        $response = null;
+
+
+        foreach ($checkbox as $id)
+        {
+            $query = 'UPDATE photo SET description = ? WHERE photo_id = ?';
+            $paramType = 'si';
+            $paramValue = array(
+                $desc,
+                $id
+            );
+            $memberId = $this->ds->update($query, $paramType, $paramValue);
+        }
+
+
+
+            $response = array(
+                "status" => "success",
+                "message" => "Immagine aggiornata!",
+
+            );
+
+
+        return $response;
+
+    }
+
+
+
+
 
     public function loginMember()
     {
