@@ -1,16 +1,59 @@
-
 <?php
-use Member;
-if (!empty($_POST["signup-btn"])) {
-    require_once 'Member.php';
-    $member = new Member();
-    $registrationResponse = $member->registerMember();
+require_once "Util.php";
+require_once "Member.php";
+
+
+
+
+session_start();
+
+$util = new Util();
+$member = new Member();
+
+$mail = $_SESSION['mail'];
+
+
+
+if(!$_SESSION['verified'])
+{
+    $util->redirect("index.php");
 }
+
+//Per caricare
+if(isset($_POST['carica'])) {
+    if (isset($_POST['desc'])) {
+        $risposta = $member->caricaImmagine($mail, $_FILES['picture'], $_POST['desc']);
+
+    }
+}
+
+//Per eliminare
+if(isset($_POST['rimuovi'])) {
+    if (isset($_POST['checkbox'])) {
+        $risposta = $member->cancellaImmagine($_POST['checkbox']);
+    }
+}
+
+//Per modifica
+if(isset($_POST['edit'])) {
+    if (isset($_POST['checkbox'])) {
+        $risposta = $member->editImmagine($_POST['checkbox'], $_POST['desc']);
+    }
+}
+
+$righe = $member->getFoto($mail);
+
+
+
+
 ?>
+
 <HTML>
 <HEAD>
-    <TITLE>User Registration</TITLE>
+    <TITLE>Gestione Foto</TITLE>
     <style>
+
+        #map { height: 300px; width: 300px}
         .sign-up-container {
             border: 1px solid;
             border-color: #9a9a9a;
@@ -107,158 +150,244 @@ if (!empty($_POST["signup-btn"])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
 </HEAD>
 <BODY>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+
 <div class="phppot-container">
-    <div class="sign-up-container">
-        <div class="login-signup">
-            <a href="index.php">Login</a>
-        </div>
+
+    <?php
+    if (!empty($risposta["status"])) {
+        if ($risposta["status"] == "success") {
+            ?>
+            <div class="server-response success-msg"><?php echo $risposta["message"]; ?></div>
+            <?php
+        }
+    }
+    ?>
+
+
+    <div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
+
         <div class="">
-            <form name="sign-up" action="" method="post"
-                  onsubmit="return signupValidation()">
-                <div class="signup-heading">Registration</div>
-                <?php
-                if (!empty($registrationResponse["status"])) {
-                    ?>
-                    <?php
-                    if ($registrationResponse["status"] == "error") {
-                        ?>
-                        <div class="server-response error-msg"><?php echo $registrationResponse["message"]; ?></div>
-                        <?php
-                    } else if ($registrationResponse["status"] == "success") {
-
-                        $to_email = $registrationResponse["mail"];
-
-                        require_once "mail.php";
-                        $oggetto = "Sono un tecnico della microsoft";
-                        $corpo = 'Salve, sono io, il Roby....spero abbiate fatto i compiti, vi mando un video di come rimuovere virus dal pc come un indian technician farebbe: https://youtu.be/oHg5SJYRHA0';
-
-                        $successo = InviaEmail("Roberto Fuligni", $to_email, $oggetto, $corpo);
-                        if ($successo) {
-                            echo '<div class="alert alert-success">';
-                            echo '<span class="closeBtn" onclick="this.parentElement.style.display=`none`;">&times;</span>';
-                            echo '<p class="text-success text-center"><b>Email inviata con successo!</b></p>';
-                            echo '</div>';
-                        } else {
-                            echo '<div class="alert alert-danger">';
-                            echo '<span class="closeBtn" onclick="this.parentElement.style.display=`none`;">&times;</span>';
-                            echo '<p class="text-danger text-center"><b>Errore:</b> errore invio email!</p>';
-                            echo '</div>';
-                        }
+            <form name="sign-up" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+                <div class="signup-heading">Carica Foto</div>
 
 
 
-                        ?>
-                        <div class="server-response success-msg"><?php echo $registrationResponse["message"]; ?></div>
-                        <?php
-                    }
-                    ?>
-                    <?php
-                }
-                ?>
-                <div class="error-msg" id="error-msg"></div>
+
                 <div class="row">
                     <div class="inline-block">
                         <div class="form-label">
-                            Username<span class="required error" id="username-info"></span>
+                            <span id="picture-info"></span>
                         </div>
-                        <input class="input-box-330" type="text" name="username"
-                               id="username">
+                        <input class="upload-image" type="file" name="picture"
+                               id="picture" accept="image/*" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="inline-block">
                         <div class="form-label">
-                            Email<span class="required error" id="email-info"></span>
+
+                            Descrizione<span class="required error" id="desc-info"></span>
                         </div>
-                        <input class="input-box-330" type="email" name="email" id="email">
+                        <textarea style="resize: none;" cols="33" name="desc"  id="desc" maxlength="255" required > </textarea>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="inline-block">
-                        <div class="form-label">
-                            Password<span class="required error" id="signup-password-info"></span>
-                        </div>
-                        <input class="input-box-330" type="password"
-                               name="signup-password" id="signup-password">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="inline-block">
-                        <div class="form-label">
-                            Confirm Password<span class="required error"
-                                                  id="confirm-password-info"></span>
-                        </div>
-                        <input class="input-box-330" type="password"
-                               name="confirm-password" id="confirm-password">
-                    </div>
-                </div>
+                <input type="hidden" name="carica" id="carica" value="carica"/>
                 <div class="row">
                     <input class="btn" type="submit" name="signup-btn"
-                           id="signup-btn" value="Sign up">
+                           id="signup-btn" value="Carica">
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Rimuovi -->
+
+    <div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
+        <div class="">
+            <form name="sign-up" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+                <div class="signup-heading">Rimuovi Foto</div>
+
+
+
+
+                <div class="row">
+                    <div class="inline-block">
+                        <?php
+
+                        if($righe != null)
+                        {
+                            $lungh = count($righe);
+                            for($i = 0; $i < $lungh; $i++)
+                            {
+                                echo '<input type="checkbox" name="checkbox[]" value="'.$righe[$i]['photo_id'].'">'.$righe[$i]['file_name'].' <br>';
+                            }
+
+                        }
+
+                        ?>
+
+
+                    </div>
+                </div>
+
+
+
+                <input type="hidden" name="rimuovi" id="rimuovi" value="rimuovi" />
+                <div class="row">
+                    <input class="btn" type="submit" name="signup-btn"
+                           id="signup-btn" value="Rimuovi">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modifica desc -->
+    <div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
+        <div class="">
+            <form name="sign-up" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+                <div class="signup-heading">Modifica Descrizione</div>
+
+
+
+                <div class="row">
+                    <div class="inline-block">
+                        <?php
+
+                        if($righe != null)
+                        {
+                            $lungh = count($righe);
+                            for($i = 0; $i < $lungh; $i++)
+                            {
+                                echo '<input type="checkbox" name="checkbox[]" value="'.$righe[$i]['photo_id'].'">'.$righe[$i]['file_name'].' <br>';
+                            }
+
+                        }
+
+                        ?>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="inline-block">
+                        <div class="form-label">
+                            Descrizione<span class="required error" id="desc-info"></span>
+                        </div>
+                        <textarea style="resize: none;" cols="33" name="desc"  id="desc" maxlength="255" required > </textarea>
+                    </div>
+                </div>
+                <input type="hidden" name="edit" id="edit" value="edit" />
+                <div class="row">
+                    <input class="btn" type="submit" name="signup-btn"
+                           id="signup-btn" value="Modifica">
+                </div>
+
+
+
+
+
+
+
+
+
+
+            </form>
+        </div>
+
+
+    </div>
+
+    <!-- tabella desc -->
+
+    <div class="sign-up-container" style="position: center; width: 75%;">
+        <div class="">
+            <div class="signup-heading">Descrizioni</div>
+
+
+
+            <div class="row">
+                <div style="overflow-x:auto;">
+                    <table border="1" style=" margin-left: auto;margin-right: auto;">
+                        <tbody><tr><td>Descrizione</td> <td>Nome Immagine</td><td>Immagine</td></tr><br>
+
+                        <?php
+
+                        if($righe != null)
+                        {
+                            $lungh = count($righe);
+                            for($i = 0; $i < $lungh; $i++)
+                            {
+                                echo '<tr><td>'.$righe[$i]['description'].'</td><td>'.$righe[$i]['file_name'].'</td><td style=" height:10%;"><img style="max-height:100%; max-width:100%"  alt="'.$righe[$i]['file_name'].'" src="imgs/'.$righe[$i]['file_name'].'"></a></td></tr><br>';
+                            }
+
+                        }
+
+                        ?>
+
+                        </tbody></table>
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+    <?php
+
+    if($righe != null)
+    {
+        $lungh = count($righe);
+        for($i = 0; $i < $lungh; $i++){
+
+            if($righe[$i]['lat'] != NULL && $righe[$i]['lng'] != NULL)
+            {
+                $imgLat = $righe[$i]['lat'];
+                $imgLng = $righe[$i]['lng'];
+                ?>
+    <div id="map" style="display: flex;justify-content: center;align-items: center;position: center;" class="sign-up-container"></div>
+
+        <script>
+            var map = L.map('map').setView([<?php echo $imgLat; ?>, <?php echo $imgLng; ?>], 4);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([<?php echo $imgLat; ?>, <?php echo $imgLng; ?>]).addTo(map)
+                .bindPopup("Img: <?php echo $righe[$i]['file_name']. '<br> Lat: '.$imgLat. '<br> Long: '.$imgLng?>")
+                .openPopup();
+        </script>
+    <?php
+    }
+        }
+
+    }
+
+    ?>
+
+
+
+
+
+
+
 </div>
 
-<script>
-    function signupValidation() {
-        var valid = true;
 
-        $("#username").removeClass("error-field");
-        $("#email").removeClass("error-field");
-        $("#password").removeClass("error-field");
-        $("#confirm-password").removeClass("error-field");
-
-        var UserName = $("#username").val();
-        var email = $("#email").val();
-        var Password = $('#signup-password').val();
-        var ConfirmPassword = $('#confirm-password').val();
-        var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-        $("#username-info").html("").hide();
-        $("#email-info").html("").hide();
-
-        if (UserName.trim() == "") {
-            $("#username-info").html("required.").css("color", "#ee0000").show();
-            $("#username").addClass("error-field");
-            valid = false;
-        }
-        if (email == "") {
-            $("#email-info").html("required").css("color", "#ee0000").show();
-            $("#email").addClass("error-field");
-            valid = false;
-        } else if (email.trim() == "") {
-            $("#email-info").html("Invalid email address.").css("color", "#ee0000").show();
-            $("#email").addClass("error-field");
-            valid = false;
-        } else if (!emailRegex.test(email)) {
-            $("#email-info").html("Invalid email address.").css("color", "#ee0000")
-                .show();
-            $("#email").addClass("error-field");
-            valid = false;
-        }
-        if (Password.trim() == "") {
-            $("#signup-password-info").html("required.").css("color", "#ee0000").show();
-            $("#signup-password").addClass("error-field");
-            valid = false;
-        }
-        if (ConfirmPassword.trim() == "") {
-            $("#confirm-password-info").html("required.").css("color", "#ee0000").show();
-            $("#confirm-password").addClass("error-field");
-            valid = false;
-        }
-        if(Password != ConfirmPassword){
-            $("#error-msg").html("Both passwords must be same.").show();
-            valid=false;
-        }
-        if (valid == false) {
-            $('.error-field').first().focus();
-            valid = false;
-        }
-        return valid;
-    }
-</script>
 </BODY>
 </HTML>
 

@@ -13,22 +13,13 @@ if(isset($_POST['member_email']) && isset($_POST['member_token']))
     if($member->verify($email, $token)){
         $_SESSION['verified'] = true;
         $util->redirect("dashboard.php");
-
-
+        $message = "Errore: email o token non validi";
     }
     else {
-
         $message = "Errore: email o token non validi";
-
-
-
     }
-
 }
-
-
 ?>
-
 <style>
     body {
         font-family: Arial;

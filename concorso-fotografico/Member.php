@@ -119,7 +119,7 @@ class Member
         $memberRecord = $this->ds->select($query, $paramType, $paramValue);
         return $memberRecord[0]['member_email'];
     }
-
+  
     public function getFoto($email)
     {
         $id = $this->getId($email);
@@ -132,9 +132,6 @@ class Member
         return $memberRecord;
 
     }
-
-
-
 
     public function verify($email, $token)
     {
@@ -161,30 +158,89 @@ class Member
     {
         $response = null;
         $id = $this->getId($email);
+        $util = new Util();
+        $img_url = $img['tmp_name'];
+        //Prendo info exif
+        $exif = @exif_read_data($img_url, 0, true);
+        if($exif == false)
+        {
+            $data = date('Y-m-d H:i:s');
+            $peso = 0;
+            $alt = 0;
+            $larg = 0;
+
+        }
+        else
+        {
+            //Data file
+            $data = $exif['FILE']['FileDateTime'];
+            $data = date('Y-m-d H:i:s', $data);
+            //Peso file
+            $peso = $util->formatBytes($exif['FILE']['FileSize']);
+            //Altezza file
+            $alt = $exif['COMPUTED']['Height'];
+            //Lunghezza file
+            $larg = $exif['COMPUTED']['Width'];
+        }
+
+        //Geotag
+        $imgLocation = $util->get_image_location($img_url);
+
+        $imgLng = 0;
+        $imgLat = 0;
+
+        if($imgLocation != NULL)
+        {
+            //latitude & longitude
+            $imgLat = $imgLocation['latitude'];
+            $imgLng = $imgLocation['longitude'];
+
+        }
 
         if (!empty($img["name"])) {
-            $target = "imgs/".$img["name"];
+            $nome = $img['name'];
+            $ext = explode(".", $nome)[1];
+            $query = 'SELECT file_name FROM photo';
+            $ver = $this->ds->runBaseQuery($query);
+
+            if($ver != null)
+            {
+                    for ($i = 0; $i < count($ver); $i++)
+                    {
+                        $rand = md5(uniqid($email, true));
+                        $unifier = substr($rand, 0, 8);
+                        if(strcmp($ver[$i]['file_name'], $nome) == 0)
+                        {
+                            $nome = $nome.$unifier.".".$ext;
+                            $i = -1;
+                        }
+                    }
+            }
+            $target = "imgs/".$nome;
             move_uploaded_file($img["tmp_name"], $target);
         }
 
-        $query = 'INSERT INTO photo (description, member_id, file_name) VALUES (?, ?, ?)';
-        $paramType = 'sis';
+        $query = 'INSERT INTO photo (description, member_id, file_name, height, width, occupazione, lat, lng, data_scatto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $paramType = 'sisiisdds';
         $paramValue = array(
             $desc,
             $id,
-            $img["name"]
+            $nome,
+            $alt,
+            $larg,
+            $peso,
+            $imgLat,
+            $imgLng,
+            $data
         );
         $memberId = $this->ds->insert($query, $paramType, $paramValue);
         if(!empty($memberId)) {
             $response = array(
                 "status" => "success",
                 "message" => "Immagine caricata!",
-
             );
         }
-
         return $response;
-
     }
 
     public function cancellaImmagine($checkbox)
@@ -200,7 +256,6 @@ class Member
             );
             $ver = $this->ds->select($query, $paramType, $paramValue);
             unlink("imgs/".$ver[0]['file_name']);
-
             $query = 'DELETE FROM photo WHERE photo_id = ?';
             $paramType = 'i';
             $paramValue = array(
@@ -221,7 +276,6 @@ class Member
     {
         $response = null;
 
-
         foreach ($checkbox as $id)
         {
             $query = 'UPDATE photo SET description = ? WHERE photo_id = ?';
@@ -232,23 +286,14 @@ class Member
             );
             $memberId = $this->ds->update($query, $paramType, $paramValue);
         }
+        $response = array(
+            "status" => "success",
+            "message" => "Immagine aggiornata!",
 
-
-
-            $response = array(
-                "status" => "success",
-                "message" => "Immagine aggiornata!",
-
-            );
-
+        );
 
         return $response;
-
     }
-
-
-
-
 
     public function loginMember()
     {

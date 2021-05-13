@@ -2,17 +2,12 @@
 require_once "Util.php";
 require_once "Member.php";
 
-
-
-
 session_start();
 
 $util = new Util();
 $member = new Member();
 
 $mail = $_SESSION['mail'];
-
-
 
 if(!$_SESSION['verified'])
 {
@@ -42,10 +37,6 @@ if(isset($_POST['edit'])) {
 }
 
 $righe = $member->getFoto($mail);
-
-
-
-
 ?>
 
 <HTML>
@@ -148,7 +139,13 @@ $righe = $member->getFoto($mail);
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
 </HEAD>
 <BODY>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""/>
 
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
 <div class="phppot-container">
 
     <?php
@@ -323,13 +320,39 @@ $righe = $member->getFoto($mail);
 
 
     </div>
+    <?php
 
+    if($righe != null)
+    {
+        $lungh = count($righe);
+        for($i = 0; $i < $lungh; $i++){
 
+            if($righe[$i]['lat'] != NULL && $righe[$i]['lng'] != NULL)
+            {
+                $imgLat = $righe[$i]['lat'];
+                $imgLng = $righe[$i]['lng'];
 
+                echo '<div id="map'.$i.'" style="display: flex;justify-content: center;align-items: center;position: center;height: 300px; width: 300px" class="sign-up-container"></div>'
+                ?>
+                <script>
+                    var map = L.map('<?php echo "map".$i; ?>').setView([<?php echo $imgLat; ?>, <?php echo $imgLng; ?>], 4);
 
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    L.marker([<?php echo $imgLat; ?>, <?php echo $imgLng; ?>]).addTo(map)
+                        .bindPopup("Img: <?php echo $righe[$i]['file_name']. '<br> Lat: '.$imgLat. '<br> Long: '.$imgLng?>")
+                        .openPopup();
+                </script>
+                <?php
+            }
+        }
+
+    }
+    ?>
 </div>
 
 
 </BODY>
 </HTML>
-
