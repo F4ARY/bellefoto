@@ -1,46 +1,52 @@
 # bellefotosrl
 
 L’azienda “Belle Foto srl” commissiona la creazione di un sito per la gestione di un concorso fotografico.
+
 La partecipazione al concorso è riservata agli utenti registrati.
+
 Per ogni partecipante è necessario memorizzare: Cognome, Nome, email, password, immagine profilo.
-La registrazione avviene tramite un apposito form in cui vengono chieste le informazioni necessarie (per la
-password chiedere conferma). Al termine dell’immissione dei dati, l’attivazione del profilo avviene dopo
-conferma tramite token inviato tramite email.
-Il login deve avvenire tramite immissione dell’email (univoca) e password (memorizzata in modalità criptata
-nel database); è previsto inoltre la funzionalità “remember me” tramite una checkbox nel form di login.
+
+La registrazione avviene tramite un apposito form in cui vengono chieste le informazioni necessarie (per la password chiedere conferma). Al termine dell’immissione dei dati, l’attivazione del profilo avviene dopo conferma tramite token inviato tramite email.
+
+Il login deve avvenire tramite immissione dell’email (univoca) e password (memorizzata in modalità criptata nel database); è previsto inoltre la funzionalità “remember me” tramite una checkbox nel form di login.
+
 Dopo essersi correttamente autenticati, gli utenti possono:
+
 - Gestire le proprie foto: è previsto il caricamento (con indicazione di una descrizione testuale), la
 rimozione delle foto e la modifica della loro descrizione.
+
 - Visualizzare le foto degli altri utenti, filtrandole in base a una parola chiave presente nella
 descrizione delle foto.
-o Per ogni foto vengono visualizzate:
- le informazioni di scatto(se presenti) e le dimensioni (altezza, larghezza,
-occupazione)
- Nel caso la foto contenga geotag, visualizzare una mappa con il marker del luogo e
-la data/ora in cui è stata scattata.
- Il numero di valutazioni e la valutazione media.
- I commenti fatti dagli utenti
+	o Per ogni foto vengono visualizzate:
+		- le informazioni di scatto(se presenti) e le dimensioni (altezza, larghezza, occupazione)
+		- Nel caso la foto contenga geotag, visualizzare una mappa con il marker del luogo e la data/ora in cui è stata scattata.
+		- Il numero di valutazioni e la valutazione media.
+		- I commenti fatti dagli utenti
 
 - Dare un voto a una o più foto attribuendone un voto da 1 a 5. (non è possibile votare le proprie
 foto)
+
 - Scrivere un commento ad una foto.
+
 - Inviare un messaggio privato all’autore di una foto
+
 - Segnalare una foto come inappropriata
+
 - Visualizzare i propri messaggi privati
 
 Una sezione del sito accessibile solamente all’amministratore consentirà di:
+
 - Visualizzare le informazioni dei partecipanti al concorso
-- Visualizzare le segnalazioni delle foto considerate inappropriate. Dopo averle visualizzate,
-l’amministratore potrà nascondere la foto dalla sezione pubblica segnalando la violazione al
-partecipante (tramite messaggistica interna) e inibendo il login per 24 ore (events), ignorare e
-cancellare la segnalazione, espellere il partecipante al concorso (viene inibito il login segnalando
-l’esclusione tramite email e tutte le foto del partecipante vengono nascoste dalla sezione pubblica)
+
+- Visualizzare le segnalazioni delle foto considerate inappropriate. Dopo averle visualizzate, l’amministratore potrà nascondere la foto dalla sezione pubblica segnalando la violazione al partecipante (tramite messaggistica interna) e inibendo il login per 24 ore (events), ignorare e cancellare la segnalazione, espellere il partecipante al concorso (viene inibito il login segnalando l’esclusione tramite email e tutte le foto del partecipante vengono nascoste dalla sezione pubblica)
+
 - Visualizzare lo storico di tutte le votazioni (triggers)
+
 - Visualizzare lo storico di tutte le operazioni svolte dai partecipanti (triggers)
-- Visualizzare tramite un istogramma i partecipanti che hanno avuto il maggior numero di votazioni
-(cumulare le valutazioni delle singole foto)
-- Produrre in un file PDF l’esito del concorso: stampare un tabulato con la classifica delle 5 foto con la
-media voto maggiore e il relativo fotografo (con foto profilo).
+
+- Visualizzare tramite un istogramma i partecipanti che hanno avuto il maggior numero di votazioni (cumulare le valutazioni delle singole foto)
+
+- Produrre in un file PDF l’esito del concorso: stampare un tabulato con la classifica delle 5 foto con la media voto maggiore e il relativo fotografo (con foto profilo).
 
 
 
