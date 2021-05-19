@@ -48,7 +48,7 @@ Una sezione del sito accessibile solamente all’amministratore consentirà di:
 
 - Produrre in un file PDF l’esito del concorso: stampare un tabulato con la classifica delle 5 foto con la media voto maggiore e il relativo fotografo (con foto profilo).
 
-**TABELLA PUNTEGGIO*
+**TABELLA PUNTEGGIO**
 
 PUNTI | N | DESCRIZIONE
 --- | --- | ---
