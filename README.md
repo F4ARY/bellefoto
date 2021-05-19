@@ -27,6 +27,7 @@ foto)
 - Inviare un messaggio privato all’autore di una foto
 - Segnalare una foto come inappropriata
 - Visualizzare i propri messaggi privati
+
 Una sezione del sito accessibile solamente all’amministratore consentirà di:
 - Visualizzare le informazioni dei partecipanti al concorso
 - Visualizzare le segnalazioni delle foto considerate inappropriate. Dopo averle visualizzate,
