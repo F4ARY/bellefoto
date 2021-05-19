@@ -54,7 +54,7 @@ PUNTI | N | DESCRIZIONE
 --- | --- | ---
 13 | 1 | database
 --- | --- | ---
-   | 2 | form di registrazione
+. | 2 | form di registrazione
 --- | --- | ---
 2 | 2.1 | conferma password (deve essere criptata)
 --- | --- | ---
@@ -66,7 +66,7 @@ PUNTI | N | DESCRIZIONE
 --- | --- | ---
 1 | 2.5 | controllo email univoca
 --- | --- | ---
-   | 3 | form di login
+. | 3 | form di login
 --- | --- | ---
 2 | 3.1 | controllo se è abilitato
 --- | --- | ---
@@ -74,7 +74,7 @@ PUNTI | N | DESCRIZIONE
 --- | --- | ---
 6 | 3.3 | remember me
 --- | --- | ---
-   | 4 | funzionalità partecipante (ajax)
+. | 4 | funzionalità partecipante (ajax)
 --- | --- | ---
 3 | 4.1 | caricamento foto (gestione omonimie)
 --- | --- | ---
@@ -82,7 +82,7 @@ PUNTI | N | DESCRIZIONE
 --- | --- | ---
 2 | 4.3 | cancellazione foto
 --- | --- | ---
-   | 4.4 | visualizzazione foto altri utenti
+. | 4.4 | visualizzazione foto altri utenti
 --- | --- | ---
 4 | 4.4.1 | filtro con autosuggestion descrizione
 --- | --- | ---
@@ -110,17 +110,17 @@ PUNTI | N | DESCRIZIONE
 --- | --- | ---
 5 | 4.9 | Visualizzare i propri messaggi privati (possibilità di cancellarli)
 --- | --- | ---
-   | 5 | form login amministratore
+. | 5 | form login amministratore
 --- | --- | ---
 3 | 5.1 | controllo password amministratore (solo password)
 --- | --- | ---
 3 | 5.2 | visualizzare l'elenco dei partecipanti al concorso
 --- | --- | ---
-   | 6 | visualizzazione elenco delle segnalazioni delle foto inappropriate
+. | 6 | visualizzazione elenco delle segnalazioni delle foto inappropriate
 --- | --- | ---
 3 | 6.1 | cancellazione segnalazione
 --- | --- | ---
-   | 6.2 | ammonimento
+. | 6.2 | ammonimento
 --- | --- | ---
 2 | 6.2.1 | disabilitazione foto segnalata
 --- | --- | ---
@@ -128,7 +128,7 @@ PUNTI | N | DESCRIZIONE
 --- | --- | ---
 3 | 6.2.3 | notifica sospesione tramite email
 --- | --- | ---
-   | 6.3 | esclusione utente
+. | 6.3 | esclusione utente
 --- | --- | ---
 2 | 6.3.1 | disabilitazione di tutte le foto
 --- | --- | ---
@@ -138,7 +138,7 @@ PUNTI | N | DESCRIZIONE
 --- | --- | ---
 3 | 6.4 | visualizzazione elenco votazioni
 --- | --- | ---
-   | 6.5 | visualizzazione storico delle operazioni sulle foto (utente - descrizione operazione)
+. | 6.5 | visualizzazione storico delle operazioni sulle foto (utente - descrizione operazione)
 --- | --- | ---
 2 | 6.5.1 | inserimento nuova foto
 --- | --- | ---
