@@ -48,64 +48,111 @@ Una sezione del sito accessibile solamente all’amministratore consentirà di:
 
 - Produrre in un file PDF l’esito del concorso: stampare un tabulato con la classifica delle 5 foto con la media voto maggiore e il relativo fotografo (con foto profilo).
 
+**TABELLA PUNTEGGIO*
 
-
-
-																									
-																									
-13	1.      database																								
-	2.      form di registrazione																								
-2	2.1.   conferma password (deve essere criptata)																								
-2	2.2.   upload immagine del profilo (blob)																								
-3	2.3.   invio email con generazione token																								
-3	2.4.   controllo del token e abilitazione partecipante																								
-1	2.5.   controllo email univoca																								
-	3.      form di login																								
-2	3.1.   controllo se è abilitato																								
-3	3.2.   controllo credenziali utente																								
-6	3.3.   remember me																								
-	4.      funzionalità partecipante (ajax)																								
-3	4.1.   caricamento foto (gestione omonimie)																								
-2	4.2.   modifica foto																								
-2	4.3.   cancellazione foto																								
-	4.4.   visualizzazione foto altri utenti																								
-4	4.4.1.filtro con autosuggestion descrizione																								
-2	4.4.2.informazioni di scatto (exif)																								
-2	4.4.3.dimensioni																								
-7	4.4.4.geotag con visualizzazione mappa																								
-2	4.4.5.data di scatto																								
-4	4.4.6.numero di votazioni																								
-4	4.4.7.valutazione media																								
-4	4.4.8.commenti																								
-6	4.5.   dare un voto ad una foto (non può votare le proprie foto, non può votare più la volte la stessa foto di altri utenti)																								
-5	4.6.   scrivere commenti ad una foto																								
-4	4.7.   inviare messaggio ad autore foto																								
-4	4.8.   Segnalare una foto come inappropriata																								
-5	4.9.   Visualizzare i propri messaggi privati (possibilità di cancellarli)																								
-	5.      form login amministratore																								
-3	5.1.   controllo password amministratore (solo password)																								
-3	5.2.   visualizzare l'elenco dei partecipanti al concorso																								
-	6.      visualizzazione elenco delle segnalazioni delle foto inappropriate																								
-3	6.1.   cancellazione segnalazione																								
-	6.2.   ammonimento																								
-2	6.2.1.disabilitazione foto segnalata																								
-4	6.2.2.sospensione login per 24 ore																								
-3	6.2.3.notifica sospesione tramite email																								
-	6.3.   esclusione utente																								
-2	6.3.1.disabilitazione di tutte le foto																								
-2	6.3.2.inibizione login utente																								
-3	6.3.3.notifica esclusione tramite email																								
-3	6.4.   visualizzazione elenco votazioni																								
-	6.5.   visualizzazione storico delle operazioni sulle foto (utente - descrizione operazione)																								
-2	6.5.1.inserimento nuova foto																								
-2	6.5.2.modifica descrizione foto																								
-2	6.5.3.cancellazione foto																								
-5	7.      visualizzane istogramma utenti con maggior numero di votazioni																								
-6	8.      creazione PDF con risultato concorso																								
-																									
-10	CURA DEL SITO																				
-
-150	TOTALE
+PUNTI | N | DESCRIZIONE
+--- | --- | ---
+13 | 1 | database
+--- | --- | ---
+ | 2 | form di registrazione
+--- | --- | ---
+2 | 2.1 | conferma password (deve essere criptata)
+--- | --- | ---
+2 | 2.2 | upload immagine del profilo (blob)
+--- | --- | ---
+3 | 2.3 | invio email con generazione token
+--- | --- | ---
+3 | 2.4 | controllo del token e abilitazione partecipante
+--- | --- | ---
+1 | 2.5 | controllo email univoca
+--- | --- | ---
+ | 3 | form di login
+--- | --- | ---
+2 | 3.1 | controllo se è abilitato
+--- | --- | ---
+3 | 3.2 | controllo credenziali utente
+--- | --- | ---
+6 | 3.3 | remember me
+--- | --- | ---
+ | 4 | funzionalità partecipante (ajax)
+--- | --- | ---
+3 | 4.1 | caricamento foto (gestione omonimie)
+--- | --- | ---
+2 | 4.2 | modifica foto
+--- | --- | ---
+2 | 4.3 | cancellazione foto
+--- | --- | ---
+ | 4.4 | visualizzazione foto altri utenti
+--- | --- | ---
+4 | 4.4.1 | filtro con autosuggestion descrizione
+--- | --- | ---
+2 | 4.4.2 | informazioni di scatto (exif)
+--- | --- | ---
+2 | 4.4.3 | dimensioni
+--- | --- | ---
+7 | 4.4.4 | geotag con visualizzazione mappa
+--- | --- | ---
+2 | 4.4.5 | data di scatto
+--- | --- | ---
+4 | 4.4.6 | numero di votazioni
+--- | --- | ---
+4 | 4.4.7 | valutazione media
+--- | --- | ---
+4 | 4.4.8 | commenti
+--- | --- | ---
+6 | 4.5 | dare un voto ad una foto (non può votare le proprie foto, non può votare più la volte la stessa foto di altri utenti)
+--- | --- | ---
+5 | 4.6 | scrivere commenti ad una foto
+--- | --- | ---
+4 | 4.7 | inviare messaggio ad autore foto
+--- | --- | ---
+4 | 4.8 | Segnalare una foto come inappropriata
+--- | --- | ---
+5 | 4.9 | Visualizzare i propri messaggi privati (possibilità di cancellarli)
+--- | --- | ---
+ | 5 | form login amministratore
+--- | --- | ---
+3 | 5.1 | controllo password amministratore (solo password)
+--- | --- | ---
+3 | 5.2 | visualizzare l'elenco dei partecipanti al concorso
+--- | --- | ---
+ | 6 | visualizzazione elenco delle segnalazioni delle foto inappropriate
+--- | --- | ---
+3 | 6.1 | cancellazione segnalazione
+--- | --- | ---
+ | 6.2 | ammonimento
+--- | --- | ---
+2 | 6.2.1 | disabilitazione foto segnalata
+--- | --- | ---
+4 | 6.2.2 | sospensione login per 24 ore
+--- | --- | ---
+3 | 6.2.3 | notifica sospesione tramite email
+--- | --- | ---
+ | 6.3 | esclusione utente
+--- | --- | ---
+2 | 6.3.1 | disabilitazione di tutte le foto
+--- | --- | ---
+2 | 6.3.2 | inibizione login utente
+--- | --- | ---
+3 | 6.3.3 | notifica esclusione tramite email
+--- | --- | ---
+3 | 6.4 | visualizzazione elenco votazioni
+--- | --- | ---
+ | 6.5 | visualizzazione storico delle operazioni sulle foto (utente - descrizione operazione)
+--- | --- | ---
+2 | 6.5.1 | inserimento nuova foto
+--- | --- | ---
+2 | 6.5.2 | modifica descrizione foto
+--- | --- | ---
+2 | 6.5.3 | cancellazione foto
+--- | --- | ---
+5 | 7 | visualizzane istogramma utenti con maggior numero di votazioni
+--- | --- | ---
+6 | 8 | creazione PDF con risultato concorso
+--- | --- | ---
+10 |  | CURA DEL SITO
+--- | --- | ---
+150 |  |  **TOTALE**
 
 **RANGE**
 
