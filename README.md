@@ -101,8 +101,8 @@ Una sezione del sito accessibile solamente all’amministratore consentirà di:
 | 2  | 6.5.3.cancellazione foto                                                                                                   |
 | 5  | 7. visualizzane istogramma utenti con maggior numero di votazioni                                                          |
 | 6  | 8. creazione PDF con risultato concorso                                                                                    |
-| 10  | CURA DEL SITO                                                                              			          |
-| 150  | TOTALE                                                                              			          |
+| 10  | CURA DEL SITO                                                                              			                      |
+| 150  | TOTALE                                                                              			          				  |
 
 |     | RANGE |
 | --- | ----- |
