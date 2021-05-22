@@ -30,14 +30,14 @@ class Member
         return $result;
     }
 
-    public function registerMember()
+    public function  registerMember()
     {
         $token = md5(uniqid($_POST['email'], true));
         $token = substr($token, 0, 16 );
 
         $response = array(
             "status" => "success",
-            "message" => "You have registered successfully.",
+            "message" => "Registrazione avvenuta con successo. <br><b>Controlla la mail di conferma</b>",
             "mail" => $_POST['email'],
             "token" => $token
         );
@@ -45,7 +45,7 @@ class Member
         if ($isEmailExists) {
             $response = array(
                 "status" => "error",
-                "message" => "Email already exists.",
+                "message" => "La mail esiste già.",
             );
         } else {
             if (!empty($_POST["signup-password"])) {
@@ -77,7 +77,7 @@ class Member
             if(!empty($memberId)) {
                 $response = array(
                     "status" => "success",
-                    "message" => "You have registered successfully.",
+                    "message" => "Registrazione avvenuta con successo. <br><b>Controlla la mail di conferma</b>",
                     "mail" => $email,
                     "token" => $token
                 );
@@ -131,6 +131,21 @@ class Member
         $memberRecord = $this->ds->select($query, $paramType, $paramValue);
         if($memberRecord != null)
             return $memberRecord[0]['member_email'];
+        else
+            return "Cancellato";
+
+    }
+
+    public function getNameById($id)
+    {
+        $query = 'SELECT member_name, member_surname FROM members where member_id = ?';
+        $paramType = 's';
+        $paramValue = array(
+            $id
+        );
+        $memberRecord = $this->ds->select($query, $paramType, $paramValue);
+        if($memberRecord != null)
+            return $memberRecord[0]['member_name'] . " " . $memberRecord[0]['member_surname'];
         else
             return "Cancellato";
 

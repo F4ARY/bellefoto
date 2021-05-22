@@ -16,276 +16,300 @@ if (!empty($_POST["signup-btn"])) {
     $registrationResponse = $member->registerMember();
 }
 ?>
-<HTML>
-<HEAD>
-<TITLE>User Registration</TITLE>
-<style>
-.sign-up-container {
-	border: 1px solid;
-	border-color: #9a9a9a;
-	background: #fff;
-	border-radius: 4px;
-	padding: 10px;
-	width: 350px;
-	margin: 50px auto;
-}
+<!-- LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL -->
+<!DOCTYPE html>
+<html lang="it">
 
-.page-header {
-	float: right;
-}
+<head>
+    <meta charset="UTF-8">
+    <title>Registrazione</title>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:400,700'>
 
-.login-signup {
-	margin: 10px;
-	text-decoration: none;
-	float: right;
-}
+    <style>
+        body {
+            background-color: #e9e9e9;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            line-height: 1.25;
+            letter-spacing: 1px;
+        }
 
-.login-signup a {
-	text-decoration: none;
-	font-weight: 700;
-}
+        * {
+            box-sizing: border-box;
+            transition: .25s all ease;
+        }
 
-.signup-heading {
-	font-size: 2em;
-	font-weight: bold;
-	padding-top: 60px;
-	text-align: center;
-}
+        .login-container {
+            display: block;
+            position: relative;
+            z-index: 0;
+            margin: 4rem auto 0;
+            padding: 5rem 4rem 0 4rem;
+            width: 100%;
+            max-width: 525px;
+            min-height: 680px;
+            background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/283591/login-background.jpg);
+            background: no-repeat;
+            box-shadow: 0 50px 70px -20px rgba(0, 0, 0, 0.85);
+        }
 
-.inline-block {
-	display: inline-block;
-}
+        .login-container:after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            z-index: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: radial-gradient(ellipse at left bottom, rgba(22, 24, 47, 1) 0%, rgba(38, 20, 72, .9) 59%, rgba(17, 27, 75, .9) 100%);
+            box-shadow: 0 -20px 150px -20px rgba(0, 0, 0, 0.5);
+        }
 
-.row {
-	margin: 15px 0px;
-	text-align: center;
-}
+        .form-login {
+            position: relative;
+            z-index: 1;
+            padding-bottom: 4.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        }
 
-.form-label {
-	margin-bottom: 5px;
-	text-align: left;
-}
+        .login-nav {
+            position: relative;
+            padding: 0;
+            margin: 0 0 6em 1rem;
+        }
 
-input.input-box-330 {
-	width: 250px;
-}
+        .login-nav__item {
+            list-style: none;
+            display: inline-block;
+        }
 
-.sign-up-container .error {
-	color: #ee0000;
-	padding: 0px;
-	background: none;
-	border: #ee0000;
-}
+        .login-nav__item+.login-nav__item {
+            margin-left: 2.25rem;
+        }
 
-.sign-up-container .error-field {
-	border: 1px solid #d96557;
-}
+        .login-nav__item a {
+            position: relative;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 1.25rem;
+            padding-bottom: .5rem;
+            transition: .20s all ease;
+        }
 
-.sign-up-container .error:before {
-	content: '*';
-	padding: 0 3px;
-	color: #D8000C;
-}
+        .login-nav__item.active a,
+        .login-nav__item a:hover {
+            color: #ffffff;
+            transition: .15s all ease;
+        }
 
-.error-msg {
-	padding-top: 10px;
-	color: #D8000C;
-	text-align: center;
-}
+        .login-nav__item a:after {
+            content: '';
+            display: inline-block;
+            height: 10px;
+            background-color: rgb(255, 255, 255);
+            position: absolute;
+            right: 100%;
+            bottom: -1px;
+            left: 0;
+            border-radius: 50%;
+            transition: .15s all ease;
+        }
 
-.success-msg {
-    padding-top: 10px;
-	color: #176701;
-	text-align: center;
-}
+        .login-nav__item a:hover:after,
+        .login-nav__item.active a:after {
+            background-color: rgb(17, 97, 237);
+            height: 2px;
+            right: 0;
+            bottom: 2px;
+            border-radius: 0;
+            transition: .20s all ease;
+        }
 
-input.btn {
-	width: 250px
-}
+        .login__label {
+            display: block;
+            padding-left: 1rem;
+        }
 
-.signup-align {
-	margin: 0 auto;
-}
+        .login__label,
+        .login__label--checkbox {
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            font-size: .75rem;
+            margin-bottom: 1rem;
+        }
 
-.page-content {
-	font-weight: bold;
-	padding-top: 60px;
-	text-align: center;
-}
-</style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
-</HEAD>
-<BODY>
-	<div class="phppot-container">
-		<div class="sign-up-container">
-			<div class="login-signup">
-				<a href="index.php">Login</a>
-			</div>
-			<div class="">
-				<form name="sign-up" action="" method="post" enctype="multipart/form-data"
-					onsubmit="return signupValidation()">
-					<div class="signup-heading">Registration</div>
-				<?php
-    if (!empty($registrationResponse["status"])) {
-        ?>
-                    <?php
-        if ($registrationResponse["status"] == "error") {
+        .login__label--checkbox {
+            display: inline-block;
+            position: relative;
+            padding-left: 1.5rem;
+            margin-top: 2rem;
+            margin-left: 1rem;
+            color: #ffffff;
+            font-size: .75rem;
+            text-transform: inherit;
+        }
+
+        .login__input {
+            color: white;
+            text-align: center;
+            font-size: 1.15rem;
+            width: 100%;
+            padding: .5rem 1rem;
+            border: 2px solid transparent;
+            outline: none;
+            border-radius: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 1px;
+        }
+
+        .login__input:hover,
+        .login__input:focus {
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background-color: transparent;
+        }
+
+        .login__input+.login__label {
+            margin-top: 1.5rem;
+        }
+
+        .login__input--checkbox {
+            position: absolute;
+            top: .1rem;
+            left: 0;
+            margin: 0;
+        }
+
+        .login__submit {
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+            padding: .75rem;
+            border-radius: 2rem;
+            display: block;
+            width: 100%;
+            background-color: rgba(17, 97, 237, .75);
+            border: none;
+            cursor: pointer;
+        }
+
+        .login__submit:hover {
+            background-color: rgba(17, 97, 237, 1);
+        }
+
+        .login__forgot {
+            display: block;
+            margin-top: 3rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: .75rem;
+            text-decoration: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login__forgot:hover {
+            color: rgb(17, 97, 237);
+        }
+
+        .errore{
+            text-align: center;
+            padding: 20px 0 20px 0;
+            margin: 40px;
+            background: rgba(255, 0, 0, .3);
+            border: 1px red solid;
+            border-radius: 40px;
+        }
+
+        .errore span{
+            color: white;
+        }
+
+        .successo{
+            text-align: center;
+            padding: 20px 0 20px 0;
+            margin: 40px;
+            background: rgba(0, 255, 0, .1);
+            border: 1px green solid;
+            border-radius: 40px;
+        }
+
+        .successo span{
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+<div class="login-container">
+    <form action="" class="form-login" name="sign-up" method="post" enctype="multipart/form-data">
+        <ul class="login-nav">
+            <li class="login-nav__item">
+                <a href="index.php">Login</a>
+            </li>
+            <li class="login-nav__item active">
+                <a href="signup.php">Registrati</a>
+            </li>
+        </ul>
+        <label for="login-input-user" class="login__label">Nome</label>
+        <input id="login-input-user" class="login__input" type="text" name="name"/>
+
+        <label for="login-input-user" class="login__label">Cognome</label>
+        <input id="login-input-user" class="login__input" type="text" name="surname"/>
+
+        <label for="login-input-user" class="login__label">Email</label>
+        <input id="login-input-user" class="login__input" type="email" name="email"/>
+
+        <label for="login-input-password" class="login__label">Password</label>
+        <input id="login-input-password" class="login__input" type="password" name="signup-password" />
+
+        <label for="login-input-password" class="login__label">Immagine profilo</label>
+        <input id="login-input-password" class="login__input" type="file" name="profile-picture" accept="image/jpeg, image/png, image/gif"/>
+
+        <input class="login__submit" type="submit" value="Registrati" name="signup-btn">
+
+        <?php
+        if (!empty($registrationResponse["status"])) {
             ?>
-				    <div class="server-response error-msg"><?php echo $registrationResponse["message"]; ?></div>
-                    <?php
-        } else if ($registrationResponse["status"] == "success") {
-            $to_email = $registrationResponse["mail"];
+            <?php
+            if ($registrationResponse["status"] == "error") {
+                ?>
 
-            require_once "classes/mail.php";
-            $oggetto = "Conferma registrazione";
-            $corpo = 'Ecco il token di verifica per la registrazione al concorso fotografico da inserire al momento del primo login: <b>' .$registrationResponse['token']. '</b>';
+                <div class="errore" style="display: block;">
+                    <span><?php echo $registrationResponse["message"]; ?></span>
+                </div>
+                <?php
+            } else if ($registrationResponse["status"] == "success") {
+                $to_email = $registrationResponse["mail"];
 
-            $successo = InviaEmail("Concorso Fotografico", $to_email, $oggetto, $corpo);
+                require_once "classes/mail.php";
+                $oggetto = "Registrazione Belle Foto";
+                $corpo = 'Registrazione avvenuta con successo<br>Per confermare la registrazione utilizzare il seguente token al primo accesso: <b>' .$registrationResponse['token']. '</b><br><br></br>Grazie.';
+
+                $successo = InviaEmail("Belle Foto", $to_email, $oggetto, $corpo);
+                ?>
+                <div class="successo" style="display: block;">
+                    <span><?php echo $registrationResponse["message"]; ?></span>
+                </div>
+                <?php
+            }
             ?>
-                    <div class="server-response success-msg"><?php echo $registrationResponse["message"]; ?></div>
-                    <?php
-
-            if ($successo) {
-                echo '<div class="server-response success-msg">Token inviato per mail!</div>';
-            }
-            else {
-                echo '<div class="server-response success-msg">Errore: token non inviato</div>';
-            }
+            <?php
         }
         ?>
-				<?php
-    }
-    ?>
-				<div class="error-msg" id="error-msg"></div>
-					<div class="row">
-						<div class="inline-block">
-							<div class="form-label">
-								Surname<span class="required error" id="surname-info"></span>
-							</div>
-							<input class="input-box-330" type="text" name="surname"
-								id="surname">
-						</div>
-					</div>
-					<div class="row">
-						<div class="inline-block">
-							<div class="form-label">
-								Name<span class="required error" id="name-info"></span>
-							</div>
-							<input class="input-box-330" type="text" name="name"
-								id="name">
-						</div>
-					</div>
-					<div class="row">
-						<div class="inline-block">
-							<div class="form-label">
-								Email<span class="required error" id="email-info"></span>
-							</div>
-							<input class="input-box-330" type="email" name="email" id="email">
-						</div>
-					</div>
-					<div class="row">
-						<div class="inline-block">
-							<div class="form-label">
-								Password<span class="required error" id="signup-password-info"></span>
-							</div>
-							<input class="input-box-330" type="password"
-								name="signup-password" id="signup-password">
-						</div>
-					</div>
-					<div class="row">
-						<div class="inline-block">
-							<div class="form-label">
-								Confirm Password<span class="required error"
-									id="confirm-password-info"></span>
-							</div>
-							<input class="input-box-330" type="password"
-								name="confirm-password" id="confirm-password">
-						</div>
-					</div>
-					<div class="row">
-						<div class="inline-block">
-							<div class="form-label">
-								Profile Picture<span id="profile-picture-info"></span>
-							</div>
-							<input class="upload-image" type="file" name="profile-picture"
-								id="profile-picture" accept="image/*">
-						</div>
-					</div>
-					<div class="row">
-						<input class="btn" type="submit" name="signup-btn"
-							id="signup-btn" value="Sign up">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
 
-<script>
-function signupValidation() {
-	var valid = true;
-	$("#surname").removeClass("error-field");
-	$("#name").removeClass("error-field");
-	$("#email").removeClass("error-field");
-	$("#password").removeClass("error-field");
-	$("#confirm-password").removeClass("error-field");
-	var Surname = $("#surname").val();
-	var Name = $("#name").val();
-	var email = $("#email").val();
-	var Password = $('#signup-password').val();
-    var ConfirmPassword = $('#confirm-password').val();
-	var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    </form>
+    <a class="login__forgot" style="padding-bottom: 30px">&copy; George Patrut, 2021 </a>
+</div>
 
-	$("#surname-info").html("").hide();
-	$("#name-info").html("").hide();
-	$("#email-info").html("").hide();
+</body>
 
-	if (Surname.trim() == "") {
-		$("#surname-info").html("required.").css("color", "#ee0000").show();
-		$("#surname").addClass("error-field");
-		valid = false;
-	}
-	if (Name.trim() == "") {
-		$("#name-info").html("required.").css("color", "#ee0000").show();
-		$("#name").addClass("error-field");
-		valid = false;
-	}
-	if (email == "") {
-		$("#email-info").html("required").css("color", "#ee0000").show();
-		$("#email").addClass("error-field");
-		valid = false;
-	} else if (email.trim() == "") {
-		$("#email-info").html("Invalid email address.").css("color", "#ee0000").show();
-		$("#email").addClass("error-field");
-		valid = false;
-	} else if (!emailRegex.test(email)) {
-		$("#email-info").html("Invalid email address.").css("color", "#ee0000")
-				.show();
-		$("#email").addClass("error-field");
-		valid = false;
-	}
-	if (Password.trim() == "") {
-		$("#signup-password-info").html("required.").css("color", "#ee0000").show();
-		$("#signup-password").addClass("error-field");
-		valid = false;
-	}
-	if (ConfirmPassword.trim() == "") {
-		$("#confirm-password-info").html("required.").css("color", "#ee0000").show();
-		$("#confirm-password").addClass("error-field");
-		valid = false;
-	}
-	if (Password != ConfirmPassword){
-        $("#error-msg").html("Both passwords must be same.").show();
-        valid=false;
-    }
-	if (valid == false) {
-		$('.error-field').first().focus();
-		valid = false;
-	}
+</html>
 
-	return valid;
-
-}
-</script>
-</BODY>
-</HTML>
 

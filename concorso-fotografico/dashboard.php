@@ -281,7 +281,7 @@ if(!$isLoggedIn) {
                 echo "</tr>";
 
                 // Foto di
-                echo "<tr><td>Foto di: ".$member->getEmailByID($arr["member_id"])."</td></tr>";
+                echo "<tr><td>Foto di: ".$member->getNameById($arr["member_id"])."</td></tr>";
 
                 // Mostra elimina solo se stesso utente
                 if ($current_id == $arr["member_id"]) {
