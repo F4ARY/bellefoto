@@ -1,7 +1,17 @@
 <?php
+session_start();
+
+require "classes/Util.php";
+$util = new Util();
+
+session_destroy();
+$util->clearAuthCookie();
+
+
+
 use Member as Member;
 if (!empty($_POST["signup-btn"])) {
-    require_once 'Member.php';
+    require_once 'classes/Member.php';
     $member = new Member();
     $registrationResponse = $member->registerMember();
 }
@@ -126,7 +136,7 @@ input.btn {
         } else if ($registrationResponse["status"] == "success") {
             $to_email = $registrationResponse["mail"];
 
-            require_once "mail.php";
+            require_once "classes/mail.php";
             $oggetto = "Conferma registrazione";
             $corpo = 'Ecco il token di verifica per la registrazione al concorso fotografico da inserire al momento del primo login: <b>' .$registrationResponse['token']. '</b>';
 
@@ -229,12 +239,12 @@ function signupValidation() {
 	$("#name-info").html("").hide();
 	$("#email-info").html("").hide();
 
-	if  Surname.trim() == "") {
+	if (Surname.trim() == "") {
 		$("#surname-info").html("required.").css("color", "#ee0000").show();
 		$("#surname").addClass("error-field");
 		valid = false;
 	}
-	if  Name.trim() == "") {
+	if (Name.trim() == "") {
 		$("#name-info").html("required.").css("color", "#ee0000").show();
 		$("#name").addClass("error-field");
 		valid = false;
@@ -263,7 +273,7 @@ function signupValidation() {
 		$("#confirm-password").addClass("error-field");
 		valid = false;
 	}
-	if(Password != ConfirmPassword){
+	if (Password != ConfirmPassword){
         $("#error-msg").html("Both passwords must be same.").show();
         valid=false;
     }
@@ -271,7 +281,9 @@ function signupValidation() {
 		$('.error-field').first().focus();
 		valid = false;
 	}
+
 	return valid;
+
 }
 </script>
 </BODY>

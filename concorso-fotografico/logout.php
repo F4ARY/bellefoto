@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require "Util.php";
+require "classes/Util.php";
 $util = new Util();
 
 //Clear Session

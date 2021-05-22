@@ -1,17 +1,29 @@
 <?php
-require_once "Util.php";
-require_once "Member.php";
+require_once "classes/Util.php";
+require_once "classes/Member.php";
+require_once "classes/DBController.php";
 
 session_start();
 
 $util = new Util();
 $member = new Member();
+$db = new DBController();
 
-$mail = $_SESSION['mail'];
+$query = "SELECT member_verified FROM members WHERE member_email = ?";
 
-if(!$_SESSION['verified'])
-{
-    $util->redirect("index.php");
+if (isset($_SESSION['mail']))
+    $mail = $_SESSION['mail'];
+else {
+    $mail = $_COOKIE['member_login'];
+    $ris = $db->select($query, "s", array($_COOKIE['member_login']));
+    if($ris[0]['member_verified'] == false)
+        $util->redirect("index.php");
+}
+
+if (isset($_SESSION['verified'])) {
+    if (!$_SESSION['verified']) {
+        $util->redirect("index.php");
+    }
 }
 
 //Per caricare
@@ -139,13 +151,7 @@ $righe = $member->getFoto($mail);
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
 </HEAD>
 <BODY>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-      crossorigin=""/>
 
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-        crossorigin=""></script>
 <div class="phppot-container">
 
     <?php
@@ -157,9 +163,12 @@ $righe = $member->getFoto($mail);
         }
     }
     ?>
+    <h2 style="text-align: center"><a href="dashboard.php">Home</a></h2>
 
 
     <div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
+
+
 
         <div class="">
             <form name="sign-up" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
@@ -320,37 +329,7 @@ $righe = $member->getFoto($mail);
 
 
     </div>
-    <?php
 
-    if($righe != null)
-    {
-        $lungh = count($righe);
-        for($i = 0; $i < $lungh; $i++){
-
-            if($righe[$i]['lat'] != NULL && $righe[$i]['lng'] != NULL)
-            {
-                $imgLat = $righe[$i]['lat'];
-                $imgLng = $righe[$i]['lng'];
-
-                echo '<div id="map'.$i.'" style="display: flex;justify-content: center;align-items: center;position: center;height: 300px; width: 300px" class="sign-up-container"></div>'
-                ?>
-                <script>
-                    var map = L.map('<?php echo "map".$i; ?>').setView([<?php echo $imgLat; ?>, <?php echo $imgLng; ?>], 4);
-
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
-
-                    L.marker([<?php echo $imgLat; ?>, <?php echo $imgLng; ?>]).addTo(map)
-                        .bindPopup("Img: <?php echo $righe[$i]['file_name']. '<br> Lat: '.$imgLat. '<br> Long: '.$imgLng?>")
-                        .openPopup();
-                </script>
-                <?php
-            }
-        }
-
-    }
-    ?>
 </div>
 
 

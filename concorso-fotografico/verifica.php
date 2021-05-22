@@ -1,19 +1,29 @@
 <?php
 session_start();
 
-require_once "Member.php";
-require_once "Util.php";
+require_once "classes/Member.php";
+require_once "classes/Util.php";
+require_once "classes/Auth.php";
 
 if(isset($_POST['member_email']) && isset($_POST['member_token']))
 {
+    $auth = new Auth();
     $member = new Member();
     $util = new Util();
     $token = $_POST['member_token'];
     $email = $_POST['member_email'];
     if($member->verify($email, $token)){
         $_SESSION['verified'] = true;
-        $util->redirect("dashboard.php");
-        $message = "Errore: email o token non validi";
+        $user = $auth->getMemberByUsername($email);
+        $admin = $user[0]["is_admin"];
+        $_SESSION['mail'] = $_POST['member_email'];
+        if($admin == 1)
+        {
+                $_SESSION['admin'] = true;
+                $util->redirect("admin.php");
+        }
+        else
+            $util->redirect("dashboard.php");
     }
     else {
         $message = "Errore: email o token non validi";
@@ -62,6 +72,8 @@ if(isset($_POST['member_email']) && isset($_POST['member_token']))
     }
 </style>
 
+<div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
+
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="frmLogin">
 
     <div class="error-message"><?php if(isset($message)) { echo $message; } ?></div>
@@ -86,5 +98,5 @@ if(isset($_POST['member_email']) && isset($_POST['member_token']))
                    class="form-submit-button"></span>
         </div>
     </div>
-
-</form>
+    </form>
+</div>

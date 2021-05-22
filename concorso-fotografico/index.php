@@ -1,18 +1,17 @@
 <?php
 session_start();
 
-$_SESSION['verified'] = false;
 
-require_once "Auth.php";
-require_once "Util.php";
-require_once "Member.php";
+require_once "classes/Auth.php";
+require_once "classes/Util.php";
+require_once "classes/Member.php";
 
 $auth = new Auth();
 $db_handle = new DBController();
 $util = new Util();
 $member = new Member();
 
-require_once "authCookieSessionValidate.php";
+require_once "classes/authCookieSessionValidate.php";
 
 if ($isLoggedIn) {
     if(isset($_POST["member_email"]) && isset($_POST["member_password"])){
@@ -22,14 +21,24 @@ if ($isLoggedIn) {
 
         $user = $auth->getMemberByUsername($email);
         $ver = $user[0]["member_verified"];
+        $admin = $user[0]["is_admin"];
 
         if($ver == 1) {
             $_SESSION['verified'] = true;
             $_SESSION['mail'] = $_POST['member_email'];
+        }
 
-            $util->redirect("dashboard.php");
-        }else
+        if($admin == 1)
+        {
+            $_SESSION['admin'] = true;
+            $_SESSION['verified'] = true;
+
+            $util->redirect("admin.php");
+        }
+
+        if($_SESSION['verified'] == false)
             $util->redirect("verifica.php");
+
     }
     else{
         $_SESSION['verified'] = true;
@@ -46,7 +55,9 @@ if (!empty($_POST["login"])) {
 
     $user = $auth->getMemberByUsername($email);
     if ($user == null || $user == "") {
-        $message = "Invalid Login";
+        $message = "Login non valido";
+    } else if($user[0]['is_locked'] == true){
+        $message = "Membro bloccato: Controllare la casella postale in caso di espulsione definitiva/Aspettare 24h";
     } else if (password_verify($password, $user[0]["member_password"])) {
         $isAuthenticated = true;
 
@@ -54,10 +65,16 @@ if (!empty($_POST["login"])) {
   
     if ($isAuthenticated) {
         $_SESSION["member_id"] = $user[0]["member_id"];
+        $admin = $user[0]["is_admin"];
 
         // Set Auth Cookies if 'Remember Me' checked
         if (!empty($_POST["remember"])) {
             setcookie("member_login", $email, $cookie_expiration_time);
+            $user = $auth->getMemberByUsername($email);
+            $admin = $user[0]["is_admin"];
+
+            if($admin == 1)
+                    setcookie("admin", true, $cookie_expiration_time);
 
             $random_password = $util->getToken(16);
             setcookie("random_password", $random_password, $cookie_expiration_time);
@@ -81,18 +98,31 @@ if (!empty($_POST["login"])) {
             $util->clearAuthCookie();
         }
         $ver = $user[0]['member_verified'];
+
         if($ver == 1) {
             $_SESSION['verified'] = true;
             $_SESSION['mail'] = $_POST['member_email'];
-            $util->redirect("dashboard.php");
+        }
 
-            }
+        if($admin == 1)
+        {
+            $_SESSION['verified'] = true;
+            $_SESSION['admin'] = true;
+            $util->redirect("admin.php");
+        }
+
+        if($_SESSION['verified'] == true)
+            $util->redirect("dashboard.php");
         else {
             $_SESSION['mail'] = $_POST['member_email'];
             $util->redirect("verifica.php");
         }
     } else {
-        $message = "Invalid Login";
+        if($user[0]['is_locked'] == true) {
+            $message = "Membro bloccato: Controllare la casella postale in caso di espulsione definitiva/Aspettare 24h";
+        }
+        else
+            $message = "Login non valido";
     }
 }
 ?>
@@ -138,6 +168,8 @@ if (!empty($_POST["login"])) {
     }
 </style>
 
+<div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
+
 <form action="" method="post" id="frmLogin">
     <div class="error-message"><?php if(isset($message)) { echo $message; } ?></div>
     <div class="field-group">
@@ -166,6 +198,10 @@ if (!empty($_POST["login"])) {
                 <?php if(isset($_COOKIE["member_login"])) { ?> checked
                 <?php } ?> /> <label for="remember-me">Remember me</label>
         </div>
+        <div>
+            <br>
+            <a href="signup.php">Registrati</a>
+        </div>
     </div>
     <div class="field-group">
         <div>
@@ -173,3 +209,4 @@ if (!empty($_POST["login"])) {
         </div>
     </div>
 </form>
+</div>
