@@ -14,7 +14,7 @@ $member = new Member();
 require_once "classes/authCookieSessionValidate.php";
 
 if ($isLoggedIn) {
-    if(isset($_POST["member_email"]) && isset($_POST["member_password"])){
+    if (isset($_POST["member_email"]) && isset($_POST["member_password"])) {
 
         $email = $_POST["member_email"];
         $password = $_POST["member_password"];
@@ -23,24 +23,22 @@ if ($isLoggedIn) {
         $ver = $user[0]["member_verified"];
         $admin = $user[0]["is_admin"];
 
-        if($ver == 1) {
+        if ($ver == 1) {
             $_SESSION['verified'] = true;
             $_SESSION['mail'] = $_POST['member_email'];
         }
 
-        if($admin == 1)
-        {
+        if ($admin == 1) {
             $_SESSION['admin'] = true;
             $_SESSION['verified'] = true;
 
             $util->redirect("admin.php");
         }
 
-        if($_SESSION['verified'] == false)
+        if ($_SESSION['verified'] == false)
             $util->redirect("verifica.php");
 
-    }
-    else{
+    } else {
         $_SESSION['verified'] = true;
         $util->redirect("dashboard.php");
 
@@ -56,13 +54,13 @@ if (!empty($_POST["login"])) {
     $user = $auth->getMemberByUsername($email);
     if ($user == null || $user == "") {
         $message = "Login non valido";
-    } else if($user[0]['is_locked'] == true){
+    } else if ($user[0]['is_locked'] == true) {
         $message = "Membro bloccato: Controllare la casella postale in caso di espulsione definitiva/Aspettare 24h";
     } else if (password_verify($password, $user[0]["member_password"])) {
         $isAuthenticated = true;
 
     }
-  
+
     if ($isAuthenticated) {
         $_SESSION["member_id"] = $user[0]["member_id"];
         $admin = $user[0]["is_admin"];
@@ -73,8 +71,8 @@ if (!empty($_POST["login"])) {
             $user = $auth->getMemberByUsername($email);
             $admin = $user[0]["is_admin"];
 
-            if($admin == 1)
-                    setcookie("admin", true, $cookie_expiration_time);
+            if ($admin == 1)
+                setcookie("admin", true, $cookie_expiration_time);
 
             $random_password = $util->getToken(16);
             setcookie("random_password", $random_password, $cookie_expiration_time);
@@ -99,119 +97,31 @@ if (!empty($_POST["login"])) {
         }
         $ver = $user[0]['member_verified'];
 
-        if($ver == 1) {
+        if ($ver == 1) {
             $_SESSION['verified'] = true;
             $_SESSION['mail'] = $_POST['member_email'];
         }
 
-        if($admin == 1)
-        {
+        if ($admin == 1) {
             $_SESSION['verified'] = true;
             $_SESSION['admin'] = true;
             $util->redirect("admin.php");
         }
 
-        if($_SESSION['verified'] == true)
+        if ($_SESSION['verified'] == true)
             $util->redirect("dashboard.php");
         else {
             $_SESSION['mail'] = $_POST['member_email'];
             $util->redirect("verifica.php");
         }
     } else {
-        if($user[0]['is_locked'] == true) {
+        if ($user[0]['is_locked'] == true) {
             $message = "Membro bloccato: Controllare la casella postale in caso di espulsione definitiva/Aspettare 24h";
-        }
-        else
+        } else
             $message = "Login non valido";
     }
 }
 ?>
-<style>
-    body {
-        font-family: Arial;
-    }
-
-    #frmLogin {
-        padding: 20px 40px 40px 40px;
-        background: #d7eeff;
-        border: #acd4f1 1px solid;
-        color: #333;
-        border-radius: 2px;
-        width: 300px;
-    }
-
-    .field-group {
-        margin-top: 15px;
-    }
-
-    .input-field {
-        padding: 12px 10px;
-        width: 100%;
-        border: #A3C3E7 1px solid;
-        border-radius: 2px;
-        margin-top: 5px
-    }
-
-    .form-submit-button {
-        background: #3a96d6;
-        border: 0;
-        padding: 10px 0px;
-        border-radius: 2px;
-        color: #FFF;
-        text-transform: uppercase;
-        width: 100%;
-    }
-
-    .error-message {
-        text-align: center;
-        color: #FF0000;
-    }
-</style>
-
-<div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
-
-<form action="" method="post" id="frmLogin">
-    <div class="error-message"><?php if(isset($message)) { echo $message; } ?></div>
-    <div class="field-group">
-        <div>
-            <label for="login">E-Mail</label>
-        </div>
-        <div>
-            <input name="member_email" type="text"
-                   value="<?php if(isset($_COOKIE["member_login"])) { echo $_COOKIE["member_login"]; } ?>"
-                   class="input-field">
-        </div>
-    </div>
-    <div class="field-group">
-        <div>
-            <label for="password">Password</label>
-        </div>
-        <div>
-            <input name="member_password" type="password"
-                   value="<?php if(isset($_COOKIE["member_password"])) { echo $_COOKIE["member_password"]; } ?>"
-                   class="input-field">
-        </div>
-    </div>
-    <div class="field-group">
-        <div>
-            <input type="checkbox" name="remember" id="remember"
-                <?php if(isset($_COOKIE["member_login"])) { ?> checked
-                <?php } ?> /> <label for="remember-me">Remember me</label>
-        </div>
-        <div>
-            <br>
-            <a href="signup.php">Registrati</a>
-        </div>
-    </div>
-    <div class="field-group">
-        <div>
-            <input type="submit" name="login" value="Login" class="form-submit-button"></span>
-        </div>
-    </div>
-</form>
-</div>
-
-
 <!-- LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL -->
 
 <!DOCTYPE html>
@@ -281,7 +191,7 @@ if (!empty($_POST["login"])) {
             display: inline-block;
         }
 
-        .login-nav__item+.login-nav__item {
+        .login-nav__item + .login-nav__item {
             margin-left: 2.25rem;
         }
 
@@ -369,7 +279,7 @@ if (!empty($_POST["login"])) {
             background-color: transparent;
         }
 
-        .login__input+.login__label {
+        .login__input + .login__label {
             margin-top: 1.5rem;
         }
 
@@ -415,7 +325,7 @@ if (!empty($_POST["login"])) {
             color: rgb(17, 97, 237);
         }
 
-        .errore{
+        .errore {
             text-align: center;
             padding: 20px 0 20px 0;
             margin: 40px;
@@ -424,7 +334,7 @@ if (!empty($_POST["login"])) {
             border-radius: 40px;
         }
 
-        .errore span{
+        .errore span {
             color: white;
         }
     </style>
@@ -432,26 +342,32 @@ if (!empty($_POST["login"])) {
 
 <body>
 <div class="login-container">
-    <form action="" class="form-login">
+    <form action="" class="form-login" method="post">
         <ul class="login-nav">
             <li class="login-nav__item active">
-                <a href="#">Login</a>
+                <a href="index.php">Login</a>
             </li>
             <li class="login-nav__item">
-                <a href="#">Registrati</a>
+                <a href="signup.php">Registrati</a>
             </li>
         </ul>
         <label for="login-input-user" class="login__label">Email</label>
-        <input id="login-input-user" class="login__input" type="email" />
+        <input id="login-input-user" class="login__input" type="email" name="member_email" value="<?php if (isset($_COOKIE["member_login"])) {
+            echo $_COOKIE["member_login"];
+        } ?>"/>
+
         <label for="login-input-password" class="login__label">Password</label>
-        <input id="login-input-password" class="login__input" type="password" />
+        <input id="login-input-password" class="login__input" type="password" name="member_password" value="<?php if (isset($_COOKIE["member_password"])) {
+            echo $_COOKIE["member_password"];
+        } ?>"/>
+
         <label for="login-sign-up" class="login__label--checkbox">
-            <input id="login-sign-up" type="checkbox" class="login__input--checkbox" />
+            <input id="login-sign-up" type="checkbox" class="login__input--checkbox" name="remember"/>
             Ricordami
         </label>
-        <button class="login__submit" type="submit">Accedi</button>
+        <input class="login__submit" type="submit" name="login" value="ACCEDI">
 
-        <?php if(isset($message)) {
+        <?php if (isset($message)) {
             echo '<div class="errore">
                         <span>' . $message . '</span>
                   </div>';
