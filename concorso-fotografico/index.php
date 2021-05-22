@@ -53,7 +53,7 @@ if (!empty($_POST["login"])) {
 
     $user = $auth->getMemberByUsername($email);
     if ($user == null || $user == "") {
-        $message = "Login non valido";
+        $message = "Email o password errati";
     } else if ($user[0]['is_locked'] == true) {
         $message = "Membro bloccato: Controllare la casella postale in caso di espulsione definitiva/Aspettare 24h";
     } else if (password_verify($password, $user[0]["member_password"])) {
@@ -115,10 +115,13 @@ if (!empty($_POST["login"])) {
             $util->redirect("verifica.php");
         }
     } else {
+        error_reporting(0);
         if ($user[0]['is_locked'] == true) {
             $message = "Membro bloccato: Controllare la casella postale in caso di espulsione definitiva/Aspettare 24h";
         } else
-            $message = "Login non valido";
+            $message = "Email o password errati";
+
+        error_reporting(E_ALL);
     }
 }
 ?>
