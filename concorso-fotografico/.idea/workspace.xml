@@ -7,7 +7,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" notifyAboutMissingVendor="false" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" notifyAboutMissingVendor="false" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/pdf/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -38,6 +38,7 @@
       <option name="presentableId" value="Default" />
       <updated>1621690530858</updated>
       <workItem from="1621690534910" duration="8662000" />
+      <workItem from="1621701189393" duration="11145000" />
     </task>
     <servers />
   </component>
