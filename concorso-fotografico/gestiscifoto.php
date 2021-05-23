@@ -4,6 +4,7 @@ require_once "classes/Member.php";
 require_once "classes/DBController.php";
 
 session_start();
+$current_id = $_SESSION["member_id"];
 
 $util = new Util();
 $member = new Member();
@@ -16,7 +17,7 @@ if (isset($_SESSION['mail']))
 else {
     $mail = $_COOKIE['member_login'];
     $ris = $db->select($query, "s", array($_COOKIE['member_login']));
-    if($ris[0]['member_verified'] == false)
+    if ($ris[0]['member_verified'] == false)
         $util->redirect("index.php");
 }
 
@@ -27,7 +28,7 @@ if (isset($_SESSION['verified'])) {
 }
 
 //Per caricare
-if(isset($_POST['carica'])) {
+if (isset($_POST['carica'])) {
     if (isset($_POST['desc'])) {
         $risposta = $member->caricaImmagine($mail, $_FILES['picture'], $_POST['desc']);
 
@@ -35,14 +36,14 @@ if(isset($_POST['carica'])) {
 }
 
 //Per eliminare
-if(isset($_POST['rimuovi'])) {
+if (isset($_POST['rimuovi'])) {
     if (isset($_POST['checkbox'])) {
         $risposta = $member->cancellaImmagine($_POST['checkbox']);
     }
 }
 
 //Per modifica
-if(isset($_POST['edit'])) {
+if (isset($_POST['edit'])) {
     if (isset($_POST['checkbox'])) {
         $risposta = $member->editImmagine($_POST['checkbox'], $_POST['desc']);
     }
@@ -51,178 +52,197 @@ if(isset($_POST['edit'])) {
 $righe = $member->getFoto($mail);
 ?>
 
-<HTML>
-<HEAD>
-    <TITLE>Gestione Foto</TITLE>
+<!--LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL-->
+
+
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Profilo</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet">
+
     <style>
-        .sign-up-container {
-            border: 1px solid;
-            border-color: #9a9a9a;
-            background: #fff;
-            border-radius: 4px;
-            padding: 10px;
-            width: 350px;
-            margin: 50px auto;
+        .pulsanteImmagine {
+            float: left;
+            transition: .2s all;
+            width: 50%;
+            border: none;
+            background-color: #149ddd;
+            color: white;
+            font-size: 160%;
         }
 
-        .page-header {
-            float: right;
-        }
-
-        .login-signup {
-            margin: 10px;
-            text-decoration: none;
-            float: right;
-        }
-
-        .login-signup a {
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .signup-heading {
-            font-size: 2em;
-            font-weight: bold;
-            padding-top: 60px;
-            text-align: center;
-        }
-
-        .inline-block {
-            display: inline-block;
-        }
-
-        .row {
-            margin: 15px 0px;
-            text-align: center;
-        }
-
-        .form-label {
-            margin-bottom: 5px;
-            text-align: left;
-        }
-
-        input.input-box-330 {
-            width: 250px;
-        }
-
-        .sign-up-container .error {
-            color: #ee0000;
-            padding: 0px;
-            background: none;
-            border: #ee0000;
-        }
-
-        .sign-up-container .error-field {
-            border: 1px solid #d96557;
-        }
-
-        .sign-up-container .error:before {
-            content: '*';
-            padding: 0 3px;
-            color: #D8000C;
-        }
-
-        .error-msg {
-            padding-top: 10px;
-            color: #D8000C;
-            text-align: center;
-        }
-
-        .success-msg {
-            padding-top: 10px;
-            color: #176701;
-            text-align: center;
-        }
-
-        input.btn {
-            width: 250px
-        }
-
-        .signup-align {
-            margin: 0 auto;
-        }
-
-        .page-content {
-            font-weight: bold;
-            padding-top: 60px;
-            text-align: center;
+        .pulsanteImmagine:hover {
+            transition: .2s all;
+            background-color: #7fbfdd;
         }
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
-</HEAD>
-<BODY>
+</head>
 
-<div class="phppot-container">
+<body>
 
-    <?php
-    if (!empty($risposta["status"])) {
-        if ($risposta["status"] == "success") {
-            ?>
-            <div class="server-response success-msg"><?php echo $risposta["message"]; ?></div>
-            <?php
-        }
-    }
-    ?>
-    <h2 style="text-align: center"><a href="dashboard.php">Home</a></h2>
+<!-- ======= Mobile nav toggle button ======= -->
+<i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
 
-
-    <div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
-
-
-
-        <div class="">
-            <form name="sign-up" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
-                <div class="signup-heading">Carica Foto</div>
-
-
-
-
-                <div class="row">
-                    <div class="inline-block">
-                        <div class="form-label">
-                            <span id="picture-info"></span>
-                        </div>
-                        <input class="upload-image" type="file" name="picture"
-                               id="picture" accept="image/*" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="inline-block">
-                        <div class="form-label">
-                            Descrizione<span class="required error" id="desc-info"></span>
-                        </div>
-                        <textarea style="resize: none;" cols="33" name="desc"  id="desc" maxlength="255" required > </textarea>
-                    </div>
-                </div>
-                <input type="hidden" name="carica" id="carica" value="carica"/>
-                <div class="row">
-                    <input class="btn" type="submit" name="signup-btn"
-                           id="signup-btn" value="Carica">
-                </div>
-            </form>
+<!-- ======= Header ======= -->
+<header id="header">
+    <div class="d-flex flex-column">
+        <div class="profile">
+            <img src="pfp/<?php
+            $utented = $member->getEmailByID($current_id);
+            $datiUtented = $member->getMember($utented);
+            echo $datiUtented[0]["member_profile_picture"];?>" style="width: 150px; height: 150px" alt="" class="img-fluid rounded-circle">
+            <h1 class="text-light"><a href="dashboard.php"><?php echo $member->getNameById($current_id)?></a></h1>
         </div>
+
+        <nav id="navbar" class="nav-menu navbar">
+            <ul>
+                <li><a href="dashboard.php" title="Torna alla home" class="nav-link scrollto active"><i
+                                class="bx bx-home"></i> <span>Home</span></a></li>
+                <li><a href="gestiscifoto.php" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Profilo</span></a>
+                </li>
+                <li><a href="messages.php" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Messaggi privati</span></a>
+                </li>
+                <li><a href="logout.php" class="nav-link scrollto"><i class="bx bx-door-open"></i> <span>Esci</span></a>
+                </li>
+            </ul>
+        </nav><!-- .nav-menu -->
     </div>
+</header><!-- End Header -->
 
-        <!-- Rimuovi -->
+<main id="main">
 
-    <div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
-        <div class="">
-            <form name="sign-up" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
-                <div class="signup-heading">Rimuovi Foto</div>
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Profilo</h2>
+                <ol>
+                    <li><a href="index.php">Home</a></li>
+                    <li>Profilo</li>
+                </ol>
+            </div>
+
+        </div>
+    </section><!-- End Breadcrumbs -->
+
+    <section class="inner-page">
+        <div class="container">
+
+            <div class="fotoStesse">
+                <!-- ======= SEZIONE FOTO ======= -->
+                <section id="portfolio" class="portfolio section-bg">
+                    <div class="container">
+
+                        <div class="section-title">
+                            <h2>Foto</h2>
+                        </div>
+                        <div class="row portfolio-container">
 
 
+                            <?php
 
-
-                <div class="row">
-                    <div class="inline-block">
-                        <?php
-
-                            if($righe != null)
-                            {
+                            if ($righe != null) {
                                 $lungh = count($righe);
-                                for($i = 0; $i < $lungh; $i++)
-                                {
-                                    echo '<input type="checkbox" name="checkbox[]" value="'.$righe[$i]['photo_id'].'">'.$righe[$i]['file_name'].' <br>';
+                                for ($i = 0; $i < $lungh; $i++) {
+                                    $idImmagine = $righe[$i]['photo_id'];
+
+                                    echo ' <!--IMMAGINE INIZIO-->
+
+                                                    <!-- MODALE MODIFICA DESCRIZIONE -->
+                                                    <div class="modal fade" id="modificaDescrizione' . $idImmagine . '" tabindex="-1" role="dialog"
+                                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <form name="sign-up" action="gestiscifoto.php" method="post" enctype="multipart/form-data">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">Modifica descrizione</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <span>Nuova Descrizione</span><br>
+                                                                        <textarea style="resize: none;" rows="13" cols="55" name="desc" id="desc" maxlength="1000"
+                                                                                  required=""> </textarea>
+                                                                        <input type="hidden" name="edit">
+                                                                        <input type="checkbox" name="checkbox[]" value="' . $idImmagine . '" checked style="display: none;">
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancella</button>
+                                                                        <button type="submit" class="btn btn-primary">Modifica</button>
+                                                                    </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--FINE MODALE-->
+
+                                                <!-- MODALE CONFERMA -->
+                                                <div class="modal fade" id="avvisoEliminazione' . $idImmagine . '" tabindex="-1" role="dialog"
+                                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <form name="sign-up" action="gestiscifoto.php" method="post" enctype="multipart/form-data">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Avviso</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <span>Sei sicuro di voler eliminare la foto?</span>
+                                                                    <input type="hidden" name="rimuovi">
+                                                                    <input type="checkbox" name="checkbox[]" value="' . $idImmagine . '" checked style="display: none;">
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancella</button>
+                                                                    <button type="submit" class="btn btn-primary">Conferma</button>
+                                                                </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--FINE MODALE-->
+
+                                            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+                                                <div class="portfolio-wrap" style="height: 30%; ">
+                                                    <img src="imgs/' . $righe[$i]['file_name'] . '" class="img-fluid" alt="" >
+                                                    <div class="portfolio-links">
+                                                        <button class="pulsanteImmagine" data-toggle="modal" data-target="#modificaDescrizione' . $idImmagine . '"><i
+                                                                    class="bi bi-pencil-fill"></i></button>
+                                                        <button class="pulsanteImmagine" data-toggle="modal" data-target="#avvisoEliminazione' . $idImmagine . '"><i
+                                                                    class="bi bi-x-circle-fill"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--FINE IMMAGINE-->';
                                 }
 
                             }
@@ -230,108 +250,94 @@ $righe = $member->getFoto($mail);
                             ?>
 
 
-                    </div>
-                </div>
 
 
-
-                <input type="hidden" name="rimuovi" id="rimuovi" value="rimuovi" />
-                <div class="row">
-                    <input class="btn" type="submit" name="signup-btn"
-                           id="signup-btn" value="Rimuovi">
-                </div>
-            </form>
+            </div>
         </div>
+
+        <div class="caricaFoto">
+            <!-- MODALE CARICAMENTO FOTO -->
+            <div class="modal fade" id="modaleCaricamento" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <form name="sign-up" action="gestiscifoto.php" method="post" enctype="multipart/form-data">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Carica un&apos; immagine</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <input class="upload-image" type="file" name="picture" id="picture" accept="image/*"
+                                       required>
+                                <br>
+                                <span>Descrizione</span><br>
+                                <textarea style="resize: none;" rows="13" cols="55" name="desc" id="desc"
+                                          maxlength="1000"
+                                          required> </textarea>
+                                <input type="hidden" name="carica" value="carica">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                                <button type="submit" class="btn btn-primary">Carica</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--FINE MODALE-->
+
+        </div>
+    </section><!-- End Portfolio Section -->
     </div>
 
-        <!-- Modifica desc -->
-    <div class="sign-up-container" style="display: flex;justify-content: center;align-items: center;">
-        <div class="">
-            <form name="sign-up" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
-                <div class="signup-heading">Modifica Descrizione</div>
+    <!-- PULSANTE CARICAMENTO -->
 
-
-
-                <div class="row">
-                    <div class="inline-block">
-                        <?php
-
-                        if($righe != null)
-                        {
-                            $lungh = count($righe);
-                            for($i = 0; $i < $lungh; $i++)
-                            {
-                                echo '<input type="checkbox" name="checkbox[]" value="'.$righe[$i]['photo_id'].'">'.$righe[$i]['file_name'].' <br>';
-                            }
-
-                        }
-
-                        ?>
-
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="inline-block">
-                        <div class="form-label">
-                            Descrizione<span class="required error" id="desc-info"></span>
-                        </div>
-                        <textarea style="resize: none;" cols="33" name="desc"  id="desc" maxlength="255" required > </textarea>
-                    </div>
-                </div>
-                <input type="hidden" name="edit" id="edit" value="edit" />
-                <div class="row">
-                    <input class="btn" type="submit" name="signup-btn"
-                           id="signup-btn" value="Modifica">
-                </div>
-            </form>
-        </div>
+    <button type="button" class="btn btn-primary caricafoto " data-toggle="modal" data-target="#modaleCaricamento"
+            style="position: fixed; bottom: 70px; right: 10px; border-radius: 100%; width: 70px; height: 70px;">
+        <i class="bi bi-plus" style="font-size: 240%;"></i>
+    </button>
 
 
     </div>
 
-    <!-- tabella desc -->
-
-    <div class="sign-up-container" style="position: center; width: 75%;">
-        <div class="">
-                <div class="signup-heading">Descrizioni</div>
-
-
-
-                <div class="row">
-                    <div style="overflow-x:auto;">
-                        <table border="1" style=" margin-left: auto;margin-right: auto;">
-                        <tbody><tr><td>Descrizione</td> <td>Nome Immagine</td><td>Immagine</td></tr><br>
-
-                        <?php
-
-                        if($righe != null)
-                        {
-                            $lungh = count($righe);
-                            for($i = 0; $i < $lungh; $i++)
-                            {
-                                echo '<tr><td>'.$righe[$i]['description'].'</td><td>'.$righe[$i]['file_name'].'</td><td style=" height:10%;"><img style="max-height:100%; max-width:100%"  alt="'.$righe[$i]['file_name'].'" src="imgs/'.$righe[$i]['file_name'].'"></a></td></tr><br>';
-                            }
-
-                        }
-
-                        ?>
-
-                            </tbody></table>
-
-                    </div>
-                </div>
-
-
-
-        </div>
-
-
     </div>
+    </section>
 
-</div>
+</main><!-- End #main -->
 
+<!-- ======= Footer ======= -->
+<footer id="footer">
+    <div class="container">
+        <div class="copyright">
+            &copy; Copyright <strong><span>George Patrut</span></strong>
+        </div>
+    </div>
+</footer><!-- End  Footer -->
 
-</BODY>
-</HTML>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="assets/vendor/aos/aos.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="assets/vendor/php-email-form/validate.js"></script>
+<script src="assets/vendor/purecounter/purecounter.js"></script>
+<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="assets/vendor/typed.js/typed.min.js"></script>
+<script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="assets/js/modal.js"></script>
+<script src="assets/js/util.js"></script>
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

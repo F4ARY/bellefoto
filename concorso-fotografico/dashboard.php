@@ -171,7 +171,7 @@ if (!$isLoggedIn) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>iPortfolio Bootstrap Template - Index</title>
+    <title>Concorso Fotografico</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -222,7 +222,6 @@ if (!$isLoggedIn) {
             text-align: center;
             color: white;
             text-shadow: black 2px 2px;
-            box-shadow: black 2px 2px;
         }
 
         .votazione input:hover {
@@ -314,9 +313,9 @@ if (!$isLoggedIn) {
                 </button>
               </div>
               <div class="modal-body">
-                <div id="map' . $idFoto . '" style="display: flex;justify-content: center;align-items: center;position: center;height: 300px; width: 300px"></div>
+                <div id="map' . $idFoto . '" style="display: flex;justify-content: center;align-items: center;position: center;height: 350px; width: 450px"></div>
                 <script>
-                        var map = L.map("map' . $idFoto . '").setView([' . $arr['lat'] . ', ' . $arr['lng'] . '], 10);
+                        var map = L.map("map' . $idFoto . '").setView([' . $arr['lat'] . ', ' . $arr['lng'] . '], 5);
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: \'Mappa concorso\'
@@ -420,7 +419,7 @@ if (!$isLoggedIn) {
 
                         echo '<div class="row" style="margin-bottom: 40px;">
           <div class="col-lg-4" data-aos="fade-right">
-            <img src="imgs/' . $arr['file_name'] . '" class="img-fluid" alt="" ">
+            <a href="imgs/' . $arr['file_name'] . '"><img src="imgs/' . $arr['file_name'] . '" class="img-fluid" alt="" "></a>
           </div>
           <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
           <h3>' . $nomeCaricato . ' | ' . $valutazione . ' <i class="bi bi-star-fill"></i></h3>

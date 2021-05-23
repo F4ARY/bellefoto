@@ -132,7 +132,7 @@ class Member
         if($memberRecord != null)
             return $memberRecord[0]['member_email'];
         else
-            return "Cancellato";
+            return "Utente inesistente";
 
     }
 
@@ -147,7 +147,7 @@ class Member
         if($memberRecord != null)
             return $memberRecord[0]['member_name'] . " " . $memberRecord[0]['member_surname'];
         else
-            return "Cancellato";
+            return "Utente inesistente";
 
     }
   
