@@ -17,8 +17,6 @@ class DBController {
 	}
 
 
-
-
 	
     function runBaseQuery($query) {
         $result = mysqli_query($this->conn,$query);
@@ -34,10 +32,6 @@ class DBController {
 
 
     }
-
-
-
-
 
     function runQuery($query, $param_type, $param_value_array) {
         
